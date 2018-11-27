@@ -1,0 +1,103 @@
+(*The simulated bottleneck size value*)
+
+Nb = 50;
+
+(*Total number of reads for the variant sites in the donor*) 
+
+varReadsDonor = 
+  Round[RandomVariate[NormalDistribution[500, 100], 500]];
+
+(*discard anything below zero*)
+
+varReadsDonor = Select[varReadsDonor, # > 0 &];
+
+(*Total number of reads for the variant sites in the \
+recipient*) 
+
+varReadsRecipient = 
+  Round[RandomVariate[NormalDistribution[500, 100], 500]];
+
+(*discard anything below zero*)
+
+varReadsRecipient = Select[varReadsRecipient, # > 0 &];
+
+(*True variant frequencies in the donor*)
+
+trueDonorFreq = RandomReal[{0.01, 0.5}, 500];
+
+(*frequencies below 1% are considered as noise and, \
+therefore, are discarded*)
+
+trueDonorFreq = Select[trueDonorFreq, # >= 0.01 &];
+
+(*any frequency above 50% is no longer a minor variant and \
+should be discarded*)
+
+trueDonorFreq = Select[trueDonorFreq, # < 0.5 &];
+
+(*number of reads for the variant in the donor*)
+
+readsDonor = {};
+For[i = 1, i <= Length[trueDonorFreq], i++, 
+ AppendTo[readsDonor, 
+  RandomVariate[
+   BinomialDistribution[varReadsDonor[[i]], trueDonorFreq[[i]]]]]]
+
+(*observed frequency of the variants in the donor, i.e. \
+variant reads / total reads*)
+
+obsVarFreqD = N[readsDonor/varReadsDonor];
+
+(*total number of variant reads in the founding population*)
+
+variantsR = {};
+For[i = 1, i <= Length[trueDonorFreq], i++, 
+ AppendTo[variantsR, 
+  RandomVariate[BinomialDistribution[Nb, trueDonorFreq[[i]]]]]]
+
+(*see which variants did not make through the bottleneck, \
+i.e. died out*)
+
+Flatten[Position[variantsR, 0]]
+
+{3, 15, 49, 59, 147, 192, 234, 250, 254, 290, 294, 309, \
+411, 493}
+
+(*true fraction of the viral population carrying the \
+variant allele at the time of sampling*)
+
+trueFractionCarrying = {};
+For[i = 1, i <= Length[trueDonorFreq], i++, 
+ If[variantsR[[i]] == 0, variantsR[[i]] = 1];
+ AppendTo[trueFractionCarrying, 
+  RandomVariate[
+   BetaDistribution[variantsR[[i]], Nb - variantsR[[i]]]]]]
+
+(*observed number of variant reads in the recipient*)
+
+obsVarReadR = {};
+For[i = 1, i <= Length[trueDonorFreq], i++, 
+ AppendTo[obsVarReadR, 
+  RandomVariate[
+   BinomialDistribution[varReadsRecipient[[i]], 
+    trueFractionCarrying[[i]]]]]]
+
+(*observed frequency of the variant in the recipient*)
+
+recipientFreq = N[obsVarReadR/varReadsRecipient];
+
+(*there are some sites in the recipient for which the total \
+reads are zero, we have to set their frequency back to zero*)
+
+temp = Flatten[Position[variantsR, 0]];
+
+For[i = 1, i++, i <= Length[temp], 
+ recipientFreq[[temp[[i]]]] = 0]
+
+Export["donorFreq.txt", obsVarFreqD]
+
+"donorFreq.txt"
+
+Export["recipientFreq.txt", recipientFreq]
+
+"recipientFreq.txt"
