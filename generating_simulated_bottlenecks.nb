@@ -1,0 +1,524 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     18525,        516]
+NotebookOptionsPosition[     16728,        459]
+NotebookOutlinePosition[     17106,        475]
+CellTagsIndexPosition[     17063,        472]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+  "The", " ", "simulated", " ", "bottleneck", " ", "size", " ", "value"}], 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.7523483640571623`*^9, 3.7523483786491528`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Nb", "=", "50"}], ";"}]], "Input",
+ CellChangeTimes->{{3.7523194126201143`*^9, 3.7523194150037065`*^9}, {
+  3.752321457129317*^9, 3.7523214573926134`*^9}, {3.7523242447454453`*^9, 
+  3.752324248386709*^9}, {3.7523242854705563`*^9, 3.7523242862963095`*^9}, {
+  3.7523483831950455`*^9, 3.752348383326692*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "Total", " ", "number", " ", "of", " ", "reads", " ", "for", " ", "the", 
+    " ", "variant", " ", "sites", " ", "in", " ", "the", " ", "donor"}], 
+   "*)"}], " "}]], "Input",
+ CellChangeTimes->{{3.752300790596838*^9, 3.7523008079838448`*^9}, {
+  3.752315113570301*^9, 3.7523151222281723`*^9}, {3.752316950472232*^9, 
+  3.7523169548903837`*^9}, {3.752319672929206*^9, 3.7523196730838003`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"varReadsDonor", "=", 
+   RowBox[{"Round", "[", 
+    RowBox[{"RandomVariate", "[", 
+     RowBox[{
+      RowBox[{"NormalDistribution", "[", 
+       RowBox[{"500", ",", "100"}], "]"}], ",", "500"}], "]"}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.7522417701765757`*^9, 3.752241865276515*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{"discard", " ", "anything", " ", "below", " ", "zero"}], 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.752300855325511*^9, 3.7523008722127147`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"varReadsDonor", "=", 
+   RowBox[{"Select", "[", 
+    RowBox[{"varReadsDonor", ",", 
+     RowBox[{
+      RowBox[{"#", ">", "0"}], " ", "&"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7523008815068803`*^9, 3.75230089681649*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "Total", " ", "number", " ", "of", " ", "reads", " ", "for", " ", "the", 
+    " ", "variant", " ", "sites", " ", "in", " ", "the", " ", "recipient"}], 
+   "*)"}], " "}]], "Input",
+ CellChangeTimes->{{3.752300790596838*^9, 3.7523008079838448`*^9}, {
+  3.752315113570301*^9, 3.7523151222281723`*^9}, {3.752316950472232*^9, 
+  3.7523169548903837`*^9}, {3.7523196642434664`*^9, 3.752319669285946*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"varReadsRecipient", "=", 
+   RowBox[{"Round", "[", 
+    RowBox[{"RandomVariate", "[", 
+     RowBox[{
+      RowBox[{"NormalDistribution", "[", 
+       RowBox[{"500", ",", "100"}], "]"}], ",", "500"}], "]"}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.7522417701765757`*^9, 3.752241865276515*^9}, 
+   3.7523196597943163`*^9}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{"discard", " ", "anything", " ", "below", " ", "zero"}], 
+  "*)"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"varReadsRecipient", "=", 
+   RowBox[{"Select", "[", 
+    RowBox[{"varReadsRecipient", ",", 
+     RowBox[{
+      RowBox[{"#", ">", "0"}], " ", "&"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7523009224042473`*^9, 3.7523009238101683`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+  "True", " ", "variant", " ", "frequencies", " ", "in", " ", "the", " ", 
+   "donor"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.752315628833145*^9, 3.7523156403654737`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trueDonorFreq", "=", 
+   RowBox[{"RandomReal", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.01", ",", "0.5"}], "}"}], ",", "500"}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.7522419534422054`*^9, 3.7522420071784544`*^9}, {
+   3.7522421184859824`*^9, 3.7522421457575536`*^9}, 3.7523010825535507`*^9, 
+   3.7523012465137143`*^9, {3.752301338126704*^9, 3.7523014519815617`*^9}, {
+   3.752301487988205*^9, 3.752301489550321*^9}, {3.7523197338254533`*^9, 
+   3.7523197469991975`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{
+   "frequencies", " ", "below", " ", "1", "%", " ", "are", " ", "considered", 
+    " ", "as", " ", "noise", " ", "and"}], ",", " ", "therefore", ",", " ", 
+   RowBox[{"are", " ", "discarded"}]}], "*)"}]], "Input",
+ CellChangeTimes->{{3.752301098549813*^9, 3.7523011335883713`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trueDonorFreq", "=", 
+   RowBox[{"Select", "[", 
+    RowBox[{"trueDonorFreq", ",", 
+     RowBox[{
+      RowBox[{"#", "\[GreaterEqual]", "0.01"}], " ", "&"}]}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{3.752319752810703*^9, 3.752319841357999*^9}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+  "any", " ", "frequency", " ", "above", " ", "50", "%", " ", "is", " ", "no",
+    " ", "longer", " ", "a", " ", "minor", " ", "variant", " ", "and", " ", 
+   "should", " ", "be", " ", "discarded"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.7523011455223565`*^9, 3.7523011661962595`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"trueDonorFreq", "=", 
+   RowBox[{"Select", "[", 
+    RowBox[{"trueDonorFreq", ",", 
+     RowBox[{
+      RowBox[{"#", "<", "0.5"}], " ", "&"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7522422383306303`*^9, 3.7522423243837843`*^9}, {
+   3.752301138821498*^9, 3.752301143491586*^9}, 3.752301461830068*^9, 
+   3.7523197567172556`*^9, 3.752319840164149*^9}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+  "number", " ", "of", " ", "reads", " ", "for", " ", "the", " ", "variant", 
+   " ", "in", " ", "the", " ", "donor"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.752315016872797*^9, 3.752315018748782*^9}, {
+  3.7523151010946507`*^9, 3.7523151435970416`*^9}, {3.752319831824437*^9, 
+  3.7523198343855906`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"readsDonor", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"i", "=", "1"}], ",", 
+   RowBox[{"i", "\[LessEqual]", 
+    RowBox[{"Length", "[", "trueDonorFreq", "]"}]}], ",", 
+   RowBox[{"i", "++"}], ",", 
+   RowBox[{"AppendTo", "[", 
+    RowBox[{"readsDonor", ",", 
+     RowBox[{"RandomVariate", "[", 
+      RowBox[{"BinomialDistribution", "[", 
+       RowBox[{
+        RowBox[{
+        "varReadsDonor", "\[LeftDoubleBracket]", "i", 
+         "\[RightDoubleBracket]"}], ",", 
+        RowBox[{
+        "trueDonorFreq", "\[LeftDoubleBracket]", "i", 
+         "\[RightDoubleBracket]"}]}], "]"}], "]"}]}], "]"}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.752242377908388*^9, 3.752242454482195*^9}, 
+   3.752314440593335*^9, {3.7523144916867504`*^9, 3.752314492141574*^9}, {
+   3.752314700962303*^9, 3.752314707218579*^9}, {3.7523148333653636`*^9, 
+   3.7523148776121163`*^9}, {3.752314918946578*^9, 3.75231495285992*^9}, {
+   3.752314995731312*^9, 3.752315011185998*^9}, {3.7523198751755495`*^9, 
+   3.7523198998586082`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{
+   "observed", " ", "frequency", " ", "of", " ", "the", " ", "variants", " ", 
+    "in", " ", "the", " ", "donor"}], ",", " ", 
+   RowBox[{
+    RowBox[{"i", ".", "e", ".", " ", "variant"}], " ", 
+    RowBox[{"reads", " ", "/", " ", "total"}], " ", "reads"}]}], 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.7523155807287397`*^9, 3.7523156097840853`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"obsVarFreqD", "=", 
+   RowBox[{"N", "[", 
+    RowBox[{"readsDonor", "/", "varReadsDonor"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.752314955205649*^9, 3.7523149561780496`*^9}, {
+   3.7523154145250435`*^9, 3.752315430868362*^9}, {3.7523155159608817`*^9, 
+   3.7523155234090133`*^9}, 3.7523156672884026`*^9, 3.7523198998695345`*^9}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+  "total", " ", "number", " ", "of", " ", "variant", " ", "reads", " ", "in", 
+   " ", "the", " ", "founding", " ", "population"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.752315804306117*^9, 3.752315826077918*^9}, {
+  3.7523176775016813`*^9, 3.752317682505266*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"variantsR", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"i", "=", "1"}], ",", 
+   RowBox[{"i", "\[LessEqual]", 
+    RowBox[{"Length", "[", "trueDonorFreq", "]"}]}], ",", 
+   RowBox[{"i", "++"}], ",", 
+   RowBox[{"AppendTo", "[", 
+    RowBox[{"variantsR", ",", 
+     RowBox[{"RandomVariate", "[", 
+      RowBox[{"BinomialDistribution", "[", 
+       RowBox[{"Nb", ",", 
+        RowBox[{
+        "trueDonorFreq", "\[LeftDoubleBracket]", "i", 
+         "\[RightDoubleBracket]"}]}], "]"}], "]"}]}], "]"}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.752315863258526*^9, 3.7523158860296564`*^9}, {
+  3.752319398218616*^9, 3.7523194183268585`*^9}, {3.7523198751875196`*^9, 
+  3.752319875192503*^9}, {3.752320262198979*^9, 3.7523202776845417`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{
+   "see", " ", "which", " ", "variants", " ", "did", " ", "not", " ", "make", 
+    " ", "through", " ", "the", " ", "bottleneck"}], ",", " ", 
+   RowBox[{
+    RowBox[{"i", ".", "e", ".", " ", "died"}], " ", "out"}]}], 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.7523484055073643`*^9, 3.7523484591041193`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Flatten", "[", 
+  RowBox[{"Position", "[", 
+   RowBox[{"variantsR", ",", "0"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.752318203861534*^9, 3.752318210683298*^9}, {
+   3.7523186139762383`*^9, 3.752318618704598*^9}, 3.7523202777114687`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "3", ",", "15", ",", "49", ",", "59", ",", "147", ",", "192", ",", "234", 
+   ",", "250", ",", "254", ",", "290", ",", "294", ",", "309", ",", "411", 
+   ",", "493"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.752318211236828*^9, 3.7523186191114693`*^9, {3.7523190401951933`*^9, 
+   3.752319045423167*^9}, 3.752319153072394*^9, 3.7523192935708075`*^9, {
+   3.7523194228936663`*^9, 3.752319427774563*^9}, 3.7523203607225623`*^9, {
+   3.7523207258137693`*^9, 3.752320748915823*^9}, 3.75232105636195*^9, {
+   3.7523214387245235`*^9, 3.7523214664055185`*^9}, {3.7523236818422227`*^9, 
+   3.7523236907813253`*^9}, {3.7523242586452923`*^9, 3.752324296041258*^9}, 
+   3.7523487715957527`*^9, {3.7523488474449453`*^9, 3.7523488590688734`*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+  "true", " ", "fraction", " ", "of", " ", "the", " ", "viral", " ", 
+   "population", " ", "carrying", " ", "the", " ", "variant", " ", "allele", 
+   " ", "at", " ", "the", " ", "time", " ", "of", " ", "sampling"}], 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.752316155849367*^9, 3.7523161628058043`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"trueFractionCarrying", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"i", "=", "1"}], ",", 
+   RowBox[{"i", "\[LessEqual]", 
+    RowBox[{"Length", "[", "trueDonorFreq", "]"}]}], ",", 
+   RowBox[{"i", "++"}], ",", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+       "variantsR", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}], 
+       "\[Equal]", "0"}], ",", 
+      RowBox[{
+       RowBox[{
+       "variantsR", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}], 
+       "=", "1"}]}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"AppendTo", "[", 
+     RowBox[{"trueFractionCarrying", ",", 
+      RowBox[{"RandomVariate", "[", 
+       RowBox[{"BetaDistribution", "[", 
+        RowBox[{
+         RowBox[{
+         "variantsR", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}], 
+         ",", 
+         RowBox[{"Nb", "-", 
+          RowBox[{
+          "variantsR", "\[LeftDoubleBracket]", "i", 
+           "\[RightDoubleBracket]"}]}]}], "]"}], "]"}]}], "]"}]}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.7523162456313915`*^9, 3.7523162482553306`*^9}, {
+   3.7523163040891476`*^9, 3.7523163380194435`*^9}, {3.7523164866032267`*^9, 
+   3.752316524737285*^9}, {3.75231656124673*^9, 3.752316563955448*^9}, {
+   3.7523167214554515`*^9, 3.752316726976693*^9}, {3.7523183143691196`*^9, 
+   3.752318367965889*^9}, {3.7523184402216873`*^9, 3.7523184513041086`*^9}, {
+   3.752319091929844*^9, 3.752319128109171*^9}, {3.7523193923731985`*^9, 
+   3.7523194204900784`*^9}, 3.7523198752074738`*^9, {3.7523202777204447`*^9, 
+   3.7523202777274294`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+  "observed", " ", "number", " ", "of", " ", "variant", " ", "reads", " ", 
+   "in", " ", "the", " ", "recipient"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.7523486619119215`*^9, 3.752348683961979*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"obsVarReadR", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"i", "=", "1"}], ",", 
+   RowBox[{"i", "\[LessEqual]", 
+    RowBox[{"Length", "[", "trueDonorFreq", "]"}]}], ",", 
+   RowBox[{"i", "++"}], ",", 
+   RowBox[{"AppendTo", "[", 
+    RowBox[{"obsVarReadR", ",", 
+     RowBox[{"RandomVariate", "[", 
+      RowBox[{"BinomialDistribution", "[", 
+       RowBox[{
+        RowBox[{
+        "varReadsRecipient", "\[LeftDoubleBracket]", "i", 
+         "\[RightDoubleBracket]"}], ",", 
+        RowBox[{
+        "trueFractionCarrying", "\[LeftDoubleBracket]", "i", 
+         "\[RightDoubleBracket]"}]}], "]"}], "]"}]}], "]"}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.752317083520735*^9, 3.752317108904851*^9}, {
+   3.7523171460186253`*^9, 3.7523171534547873`*^9}, {3.752317844884227*^9, 
+   3.7523178472618275`*^9}, 3.752319875217436*^9, 3.752320277736405*^9, {
+   3.7523205124619236`*^9, 3.7523205717045527`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+  "observed", " ", "frequency", " ", "of", " ", "the", " ", "variant", " ", 
+   "in", " ", "the", " ", "recipient"}], "*)"}]], "Input",
+ CellChangeTimes->{{3.752348696382777*^9, 3.7523487176758575`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"recipientFreq", "=", 
+   RowBox[{"N", "[", 
+    RowBox[{"obsVarReadR", "/", "varReadsRecipient"}], "]"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.7523171118739014`*^9, 3.752317112510198*^9}, 
+   3.7523171569105053`*^9, {3.752317209844998*^9, 3.7523172157721543`*^9}, {
+   3.7523173362351675`*^9, 3.7523173374359245`*^9}, 3.75231756347546*^9, {
+   3.752317974888424*^9, 3.752317999670187*^9}, {3.7523191439388185`*^9, 
+   3.752319148704073*^9}, 3.7523202777563925`*^9, {3.7523206318717546`*^9, 
+   3.7523206453317738`*^9}, 3.7523487288579583`*^9}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{
+   "there", " ", "are", " ", "some", " ", "sites", " ", "in", " ", "the", " ",
+     "recipient", " ", "for", " ", "which", " ", "the", " ", "total", " ", 
+    "reads", " ", "are", " ", "zero"}], ",", " ", 
+   RowBox[{
+   "we", " ", "have", " ", "to", " ", "set", " ", "their", " ", "frequency", 
+    " ", "back", " ", "to", " ", "zero"}]}], "*)"}]], "Input",
+ CellChangeTimes->{{3.75231891792467*^9, 3.752318932753364*^9}, {
+   3.752318969051372*^9, 3.75231901986549*^9}, 3.7523487377731276`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"temp", "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{"Position", "[", 
+     RowBox[{"variantsR", ",", "0"}], "]"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7523186259731293`*^9, 3.752318627707532*^9}, 
+   3.752320277766323*^9}],
+
+Cell[BoxData[
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"i", "=", "1"}], ",", 
+   RowBox[{"i", "++"}], ",", 
+   RowBox[{"i", "\[LessEqual]", 
+    RowBox[{"Length", "[", "temp", "]"}]}], ",", 
+   RowBox[{
+    RowBox[{"recipientFreq", "\[LeftDoubleBracket]", 
+     RowBox[{"temp", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}], 
+     "\[RightDoubleBracket]"}], "=", "0"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7523185503014593`*^9, 3.752318610714959*^9}, {
+  3.752318666835889*^9, 3.7523187234884844`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<donorFreq.txt\>\"", ",", "obsVarFreqD"}], "]"}]], "Input",
+ CellChangeTimes->{{3.752349084565238*^9, 3.752349089765335*^9}, {
+  3.752349131568585*^9, 3.7523491526293354`*^9}}],
+
+Cell[BoxData["\<\"donorFreq.txt\"\>"], "Output",
+ CellChangeTimes->{3.752349154323756*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<recipientFreq.txt\>\"", ",", "recipientFreq"}], "]"}]], "Input",
+ CellChangeTimes->{{3.7523493489444675`*^9, 3.752349356785465*^9}}],
+
+Cell[BoxData["\<\"recipientFreq.txt\"\>"], "Output",
+ CellChangeTimes->{3.7523493610470705`*^9}]
+}, Open  ]]
+},
+WindowSize->{1280, 637},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+Magnification:>0.9 Inherited,
+FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (September 21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 206, 5, 27, "Input"],
+Cell[767, 27, 342, 6, 27, "Input"],
+Cell[1112, 35, 449, 9, 27, "Input"],
+Cell[1564, 46, 334, 9, 27, "Input"],
+Cell[1901, 57, 185, 4, 27, "Input"],
+Cell[2089, 63, 270, 7, 27, "Input"],
+Cell[2362, 72, 453, 9, 27, "Input"],
+Cell[2818, 83, 366, 10, 27, "Input"],
+Cell[3187, 95, 117, 3, 27, "Input"],
+Cell[3307, 100, 281, 7, 27, "Input"],
+Cell[3591, 109, 215, 5, 27, "Input"],
+Cell[3809, 116, 533, 12, 27, "Input"],
+Cell[4345, 130, 334, 7, 27, "Input"],
+Cell[4682, 139, 287, 8, 27, "Input"],
+Cell[4972, 149, 328, 6, 27, "Input"],
+Cell[5303, 157, 397, 9, 27, "Input"],
+Cell[5703, 168, 348, 7, 27, "Input"],
+Cell[6054, 177, 1119, 27, 46, "Input"],
+Cell[7176, 206, 404, 10, 27, "Input"],
+Cell[7583, 218, 374, 7, 27, "Input"],
+Cell[7960, 227, 307, 6, 27, "Input"],
+Cell[8270, 235, 839, 21, 46, "Input"],
+Cell[9112, 258, 361, 9, 27, "Input"],
+Cell[CellGroupData[{
+Cell[9498, 271, 269, 5, 27, "Input"],
+Cell[9770, 278, 777, 13, 27, "Output"]
+}, Open  ]],
+Cell[10562, 294, 346, 7, 27, "Input"],
+Cell[10911, 303, 1692, 41, 64, "Input"],
+Cell[12606, 346, 243, 5, 27, "Input"],
+Cell[12852, 353, 1009, 25, 46, "Input"],
+Cell[13864, 380, 244, 5, 27, "Input"],
+Cell[14111, 387, 585, 11, 27, "Input"],
+Cell[14699, 400, 549, 11, 27, "Input"],
+Cell[15251, 413, 270, 7, 27, "Input"],
+Cell[15524, 422, 519, 12, 27, "Input"],
+Cell[CellGroupData[{
+Cell[16068, 438, 229, 4, 27, "Input"],
+Cell[16300, 444, 90, 1, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16427, 450, 186, 3, 27, "Input"],
+Cell[16616, 455, 96, 1, 27, "Output"]
+}, Open  ]]
+}
+]
+*)
+
