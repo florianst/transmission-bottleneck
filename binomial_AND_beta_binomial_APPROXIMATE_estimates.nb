@@ -1,0 +1,30 @@
+(*estimate the bottleneck*)
+
+(*approximating the binomial distribution with a Gaussian*)
+
+likelihood1 = ConstantArray[1, 200];
+For[i = 1, i <= 200, i++,
+  For[k = 1, k <= Length[trueDonorFreq], k++,
+   likelihood1[[i]] *= 
+    PDF[NormalDistribution[obsVarFreqD[[k]], 
+      Sqrt[(obsVarFreqD[[k]] (1 - obsVarFreqD[[k]])/(i))]], 
+     recipientFreq[[k]]]]];
+Flatten[Position[likelihood1, Max[likelihood1]]]
+
+Results: {24}
+
+(*approximating the beta-binomial distribution with a Gaussian and refined standard deviation term*)
+
+likelihood1 = ConstantArray[1, 200];
+For[i = 1, i <= 200, i++,
+  For[k = 1, k <= Length[trueDonorFreq], k++,
+   likelihood1[[i]] *= 
+    PDF[NormalDistribution[obsVarFreqD[[k]], 
+      Sqrt[(obsVarFreqD[[
+           k]] (1 - obsVarFreqD[[k]])/(i)) + ((obsVarFreqD[[
+             k]]*(1 - obsVarFreqD[[k]]))/(1*i))]], 
+     recipientFreq[[k]]]]];
+Flatten[Position[likelihood1, Max[likelihood1]]]
+
+Out[665]= {49}
+
