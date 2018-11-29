@@ -10,9 +10,9 @@ def update_grids(A,B,C,AD,BD,CD,size,b):
     A_next = A.copy() # create next state grids for A,B,C
     B_next = B.copy()    
     C_next = C.copy()
-    af = 0 # calculate present frequencies of strains
-    bf = 0
-    cf = 0
+    af = np.sum(A)
+    bf = np.sum(B)
+    cf = np.sum(C)
     for i in range(1,size-1): # iterate through each cell in a grid
         for j in range(1,size-1):
             if A[i,j] == 1 or B[i,j] == 1 or C[i,j] == 1:
@@ -141,14 +141,14 @@ def update_grids(A,B,C,AD,BD,CD,size,b):
                 CD[i,j] = 0
                 C[i,j] = 0
                 
-    af = 0 #np.sum(A)
+    af = np.sum(A)
     bf = np.sum(B)
     cf = np.sum(C)
     return (A,B,C,AD,BD,CD,af,bf,cf)
                 
 ### Initialize variables
 
-size = 30 # grid dimensions
+size = 100 # grid dimensions
 half_size = int(size/2)
 b = 2 # bottleneck size, range (1-3)
 t = 50 # number of iterations
@@ -175,9 +175,9 @@ ax2 = fig.add_subplot(3,1,2)
 ax3 = fig.add_subplot(3,1,3)
 for a in range(t):
     A,B,C,AD,BD,CD,af,bf,cf = update_grids(A,B,C,AD,BD,CD,size,b)
-    a1=ax1.imshow(A,interpolation='nearest',cmap='binary')
-    a2=ax2.imshow(B,interpolation='nearest',cmap='binary')
-    a3 =ax3.imshow(C,interpolation='nearest',cmap='binary')
+    a1=ax1.imshow(A,interpolation='nearest',cmap='Blues')
+    a2=ax2.imshow(B,interpolation='nearest',cmap='Reds')
+    a3 =ax3.imshow(C,interpolation='nearest',cmap='Greens')
     images.append([a1,a2,a3])
     a_freq.append(af/(np.sum(A)+np.sum(B)+np.sum(C)))
     b_freq.append(bf/(np.sum(A)+np.sum(B)+np.sum(C)))
