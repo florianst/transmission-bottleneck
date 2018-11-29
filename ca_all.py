@@ -16,7 +16,7 @@ def update_grids(A,B,C,AD,BD,CD,size,b):
     for i in range(1,size-1): # iterate through each cell in a grid
         for j in range(1,size-1):
             if A[i,j] == 1 or B[i,j] == 1 or C[i,j] == 1:
-                r = rnd.randint(1, 8)
+                r = rnd.randint(0, 3)
                 neighbours_to_infect = rnd.sample(range(0, 8), r)
                 for each in neighbours_to_infect:
                     if b == 1:
@@ -37,7 +37,17 @@ def update_grids(A,B,C,AD,BD,CD,size,b):
                             b_new = 1
                         if b_new > 3:
                             b_new = 3
-                    strains_transmitted = rnd.sample(range(1, 4), b_new) # 1=A, 2=B, 3=C
+                    if af == 0 and bf == 0 and cf == 0:
+                        strains_transmitted = rnd.sample(range(1, 4), b_new) # 1=A, 2=B, 3=C
+                    else:
+                        strains_transmitted = []
+                        strains = rnd.uniform(0,1)
+                        if strains <= af:
+                            strains_transmitted.append(1)
+                        if strains > af and strains <= bf:
+                            strains_transmitted.append(2)
+                        if strains > bf and strains <= cf:
+                            strains_transmitted.append(3)                            
 
                     # find which specific neighbour and what to transmit
                     if each == 0:
@@ -121,17 +131,17 @@ def update_grids(A,B,C,AD,BD,CD,size,b):
                 CD[i,j] += 1
     for i in range(1,size-1): # update age of strains
         for j in range(1,size-1):
-            if AD[i,j] > 10:
+            if AD[i,j] > int(rnd.gauss(10,5)):
                 AD[i,j] = 0
                 A[i,j] = 0
-            if BD[i,j] > 15:
+            if BD[i,j] > int(rnd.gauss(15,5)):
                 BD[i,j] = 0
                 B[i,j] = 0
-            if CD[i,j] > 20:
+            if CD[i,j] > int(rnd.gauss(20,5)):
                 CD[i,j] = 0
                 C[i,j] = 0
                 
-    af = np.sum(A)
+    af = 0 #np.sum(A)
     bf = np.sum(B)
     cf = np.sum(C)
     return (A,B,C,AD,BD,CD,af,bf,cf)
@@ -160,20 +170,21 @@ c_freq = []
 # create animation and plots
 images = []
 fig = plt.figure()
-ax1 = fig.add_subplot(2,2,1)
-ax2 = fig.add_subplot(2,2,2)
-ax3 = fig.add_subplot(2,2,3)
+ax1 = fig.add_subplot(3,1,1)
+ax2 = fig.add_subplot(3,1,2)
+ax3 = fig.add_subplot(3,1,3)
 for a in range(t):
     A,B,C,AD,BD,CD,af,bf,cf = update_grids(A,B,C,AD,BD,CD,size,b)
-    ax1 = plt.imshow(A,interpolation='nearest',cmap='binary')
-    ax2 = plt.imshow(B,interpolation='nearest',cmap='binary')
-    ax3 = plt.imshow(C,interpolation='nearest',cmap='binary')
-    images.append([ax1,ax2,ax3])
+    a1=ax1.imshow(A,interpolation='nearest',cmap='binary')
+    a2=ax2.imshow(B,interpolation='nearest',cmap='binary')
+    a3 =ax3.imshow(C,interpolation='nearest',cmap='binary')
+    images.append([a1,a2,a3])
     a_freq.append(af/(np.sum(A)+np.sum(B)+np.sum(C)))
     b_freq.append(bf/(np.sum(A)+np.sum(B)+np.sum(C)))
     c_freq.append(cf/(np.sum(A)+np.sum(B)+np.sum(C)))
 
 ani = anm.ArtistAnimation(fig,images,interval=250,repeat=False,blit=False)
+
 plt.show()
 
 
